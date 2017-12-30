@@ -1,7 +1,7 @@
 -- COPYRIGHT (c) Ioannis Tambouras 2011-2013
 
-You may set the GUC variable euler.style='polar' to set output to polar coordinates, or to 'j' to display in cartisian
-coordinates without parenthesis, such as  1,2j .
+You may set the GUC variable euler.style='polar' to set output to polar coordinates, or to 'j' to display in Cartesian
+coordinates without parenthesis, such as  1,2j ; similarly, set it to 'i' to display in Cartesian with 'i' instead of 'j'.
 
 # constructors
 

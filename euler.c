@@ -32,21 +32,21 @@ euler_in(PG_FUNCTION_ARGS)
      } else if (sscanf(str, "%f,%f", &x, &y) == 2) {
                result->mag   =  MAG(x,y);
                result->phase =  TO_DEGREES  * atan(y/x);
-     } else if (sscanf(str, "%f,%fj", &x, &y) == 2) {
+     } else if (sscanf(str, "%f,%f[ji]", &x, &y) == 2) {
                result->mag   =  MAG(x,y);
                result->phase =  TO_DEGREES * atan(y/x);
-     } else if ( (sscanf(buf, "%g%[j]%[_]",  &y, &c, &c) == 3) ) {
+     } else if ( (sscanf(buf, "%g%[ji]%[_]",  &y, &c, &c) == 3) ) {
                result->mag   =  MAG(0,y);
                result->phase =  90;
      } else if ( (sscanf(buf,"%g%[_]%[_]",  &x,&c,&c) == 2) ) {
                result->mag   =  MAG(x,0);
                result->phase =  0;
-     } else if ( (sscanf(buf,"%g%g%[j]%[_]",  &x,&y,&c,&c) == 4) ) {
+     } else if ( (sscanf(buf,"%g%g%[ji]%[_]",  &x,&y,&c,&c) == 4) ) {
                result->mag   =  MAG(x,y);
                result->phase =  TO_DEGREES * atan(y/x);
      }else{ 
              ereport(ERROR, (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-                            errmsg("syntax is like \"8<60>\", \"2,5\",\"(2,5)\",\"2-5j\", \"+5j\", or \"2\"")));
+                            errmsg("syntax is like \"8<60>\", \"2,5\",\"(2,5)\",\"2-5j\", \"+5i\", or \"2\"")));
      }
      PG_RETURN_POINTER(result);
 }
@@ -66,6 +66,10 @@ euler_out(PG_FUNCTION_ARGS)
                 x  =  a->mag * ( cos(a->phase * TO_RADIANS ))     ;
                 y  =  a->mag * ( sin(a->phase * TO_RADIANS ))     ;
                result = psprintf("%.3f,%.3fj", a->mag, a->phase) ;
+     } else if ( (NULL != output_style) && !(strcmp( output_style, "i")) ) {
+                x  =  a->mag * ( cos(a->phase * TO_RADIANS ))     ;
+                y  =  a->mag * ( sin(a->phase * TO_RADIANS ))     ;
+               result = psprintf("%.3f,%.3fi", a->mag, a->phase) ;
      }else{
               result = psprintf("%.3f<%.3f>", a->mag, a->phase) ;
      }

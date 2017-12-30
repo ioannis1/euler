@@ -1,0 +1,5 @@
+-- COPYRIGHT (c) Ioannis Tambouras 2011-2015
+
+comment = 'euler datatype'
+default_version = '0.2'
+relocatable = true

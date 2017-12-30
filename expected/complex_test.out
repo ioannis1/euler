@@ -1,0 +1,65 @@
+CREATE EXTENSION euler;
+SET euler.style = 'none';
+-- Input syntax
+SELECT '(1,2)'::euler  ;
+    euler    
+---------------
+ (1.000,2.000)
+(1 row)
+
+SELECT '1-2j'::euler   ;
+    euler     
+----------------
+ (1.000,-2.000)
+(1 row)
+
+SELECT '1'::euler      ;
+    euler    
+---------------
+ (1.000,0.000)
+(1 row)
+
+SELECT '-2j''::euler   ;
+
+SELECT '(1,2)'::euler +   '(1,2)';
+SELECT '(1,2)'::euler -   '(1,2)';
+SELECT '(1,2)'::euler =   '(1,2)';
+SELECT '(1,2)'::euler >   '(0,2)';
+SELECT '(1,2)'::euler >=  '(8,2)';
+
+
+-- Functions
+SELECT mag( '(3,4)'::euler );
+SELECT euler_mag_squared( '(3,4)'::euler );
+
+SELECT euler_dot('-6+8j','5,12j');
+
+SELECT  2 > '(3,4)'::euler;
+SELECT 25 >= '(3,4)'::euler;
+
+SELECT  ('(1,8)'::euler@);      -- euler conjugate
+SELECT |'(3,4)'::euler ;        -- magnitude
+
+SELECT euler_new(1,8);
+SELECT euler_new(3,1);
+
+SELECT euler_real('(-2,3)'::euler);
+SELECT euler_img('(2,-3)'::euler);
+
+SELECT euler_overlaps('(2,2)'::euler, '(1,1)');
+SELECT euler_overlaps('(2,2)'::euler, '(3,2)');
+
+SELECT euler_mult( '(2,7)'::euler, '(3,9)');
+SELECT euler_mult( '(3,2)'::euler, '(1,7)');
+SELECT euler_mult( '(1,1)'::euler, '(1,1)');
+
+SELECT euler_polar( '(4,3)');
+SELECT euler_xy('(5,36.8699)');
+SELECT euler_xy(euler_polar( '(4,3)'));
+SELECT euler_angle('4,3j');
+SELECT euler_polar(euler_angle_add('(4,3)',20));
+
+
+ERROR:  syntax error at or near "("
+LINE 3: SELECT '(1,2)'::euler +   '(1,2)';
+                ^

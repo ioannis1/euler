@@ -101,10 +101,6 @@ CREATE OR REPLACE FUNCTION euler_mult(euler,euler)
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION euler_polar(euler)
-    RETURNS euler
-    AS '$libdir/euler'
-    LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OR REPLACE FUNCTION euler_xy(euler)
     RETURNS euler
@@ -121,7 +117,7 @@ CREATE OPERATOR |^ (
 );
 CREATE OPERATOR ^ (
     rightarg = euler,
-    procedure = euler_polar
+    procedure = euler_xy
 );
 CREATE OPERATOR @ (
     leftarg = euler,
@@ -243,23 +239,19 @@ CREATE OR REPLACE FUNCTION euler_overlaps(euler,euler)
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION euler_real(euler)
-    RETURNS float4
-    AS '$libdir/euler'
-    LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OR REPLACE FUNCTION euler_img(euler)
-    RETURNS float4
-    AS '$libdir/euler'
-    LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OR REPLACE FUNCTION euler_new(float4,float4)
     RETURNS euler
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION euler_angle(euler)
+CREATE OR REPLACE FUNCTION euler_phase(euler)
     RETURNS float4
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION euler_divide(euler,euler)
+    RETURNS euler
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
@@ -268,16 +260,11 @@ CREATE OR REPLACE FUNCTION euler_theta(euler,euler)
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION euler_angle_add(euler,float4)
+CREATE OR REPLACE FUNCTION euler_phase_add(euler,float4)
     RETURNS euler
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
-
-CREATE OR REPLACE FUNCTION euler_new_polar(float4,float4)
-    RETURNS euler
-    AS '$libdir/euler'
-    LANGUAGE C IMMUTABLE STRICT;
 
 
 CREATE OPERATOR < (

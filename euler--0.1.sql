@@ -35,7 +35,7 @@ CREATE TYPE euler (
    alignment      = float
 );
 
-CREATE OR REPLACE FUNCTION euler_abs_cmp(euler,euler)
+CREATE OR REPLACE FUNCTION euler_mag_cmp(euler,euler)
    RETURNS int
     AS '$libdir/euler'
    LANGUAGE C IMMUTABLE STRICT;
@@ -201,7 +201,7 @@ CREATE OPERATOR CLASS euler_abs_ops DEFAULT FOR TYPE euler USING btree AS
         OPERATOR 3 =  ,
         OPERATOR 4 >= ,
         OPERATOR 5 >  ,
-        FUNCTION 1  euler_abs_cmp(euler,euler)
+        FUNCTION 1  euler_mag_cmp(euler,euler)
 ;
 
 CREATE OR REPLACE FUNCTION euler_int2c_cmp(int,euler)
@@ -324,4 +324,3 @@ CREATE OPERATOR CLASS euler_minimax_ops DEFAULT FOR TYPE euler USING brin AS
         OPERATOR 4 >= ,
         OPERATOR 5 >
 ;
-

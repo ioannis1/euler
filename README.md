@@ -84,10 +84,10 @@ SELECT '(4,4)' >   '(4,1)'::euler        => true
 SELECT '(4,4)' =   '(4,4)'::euler        => true
 
 
-SELECT euler_abs_cmp( '(4,4)' , '(4,4)' )    => 0
+SELECT euler_mag_cmp( '(4,4)' , '(4,4)' )    => 0
 
-SELECT euler_abs_cmp( '(4,4)' , '(1,1)' )    => 1
+SELECT euler_mag_cmp( '(4,4)' , '(1,1)' )    => 1
 
-SELECT euler_abs_cmp( '(1,1)' , '(4,4)' )    => -1
+SELECT euler_mag_cmp( '(1,1)' , '(4,4)' )    => -1
 
 

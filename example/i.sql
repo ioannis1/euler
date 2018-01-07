@@ -2,22 +2,17 @@
 SET SEARCH_PATH TO  :path,public;
 SET CLIENT_MIN_MESSAGES = 'ERROR';
 begin;
-SET complex.style='polar';
 
+SET enable_seqscan = off;
+
+--explain
 SELECT wave 
 FROM try
-WHERE  wave> age
+WHERE  wave > '2.3<220>'::euler
 ;
 
 \q
-CREATE OPERATOR CLASS cincl_ops
-  DEFAULT FOR TYPE complex
-  USING brin   AS
-    OPERATOR      3        @>(complex,complex),
-    FUNCTION      1        brin_inclusion_opcinfo(internal) ,
-    FUNCTION      2        brin_inclusion_add_value(internal, internal, internal, internal) ,
-    FUNCTION      3        brin_inclusion_consistent(internal, internal, internal) ,
-    FUNCTION      4        brin_inclusion_union(internal, internal, internal) 
+SELECT wave FROM wave.try WHERE  wave > '2.3<2>'::euler
 
 \q
 

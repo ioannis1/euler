@@ -8,6 +8,83 @@
 #include "utils/guc.h"
 #include "euler.h"
 
+PG_FUNCTION_INFO_V1(gin_extract_query_euler);
+
+
+Datum
+gin_extract_query_euler(PG_FUNCTION_ARGS)
+{
+        //Datum              query = PG_GETARG_DATUM(0);
+        int32          *nentries = (int32 *) PG_GETARG_POINTER(1);
+        //StrategyNumber  strategy = PG_GETARG_UINT16(2);
+        //bool      **partialmatch = (bool **) PG_GETARG_POINTER(3);
+        //Pointer     **extra_data = (Pointer **) PG_GETARG_POINTER(4);
+        float4             phase;
+
+        Datum           *entries = (Datum *) palloc(sizeof(Datum));
+
+        //query2 = query_fields(VARDATA_ANY(val), VARSIZE_ANY_EXHDR(val));
+        phase       = 10;
+	*nentries   = 1;
+	entries     = (Datum *) palloc(sizeof(Datum) * 1);
+        entries[0]  = Float4GetDatum( phase );
+
+        //result = cstring_to_text_with_len((char *) resstr, reslen);
+
+	PG_RETURN_POINTER(entries);
+}
+
+PG_FUNCTION_INFO_V1(gin_consistent_euler);
+
+Datum
+gin_consistent_euler(PG_FUNCTION_ARGS)
+{
+        //bool             *check = (bool *) PG_GETARG_POINTER(0);
+        //StrategyNumber strategy = PG_GETARG_UINT16(1);
+        //* text    *query = PG_GETARG_TEXT_PP(2); 
+        //int32             nkeys = PG_GETARG_INT32(3);
+        //Pointer     *extra_data = (Pointer *) PG_GETARG_POINTER(4);
+        bool           *recheck = (bool *) PG_GETARG_POINTER(5);
+
+        *recheck = false;
+        PG_RETURN_BOOL(true);
+}
+ 
+Datum
+gin_extract_value_euler(PG_FUNCTION_ARGS)
+{
+        Euler      *item     = (Euler *)  PG_GETARG_POINTER(0);
+        int32      *nentries = (int32 *)  PG_GETARG_POINTER(1);
+
+        Datum      *entries  = (Datum *) palloc(sizeof(Datum) * 2);
+        entries[0] = Float4GetDatum( item->mag );
+        entries[1] = Float4GetDatum( item->phase) ;
+        *nentries  = 2;
+        PG_RETURN_POINTER(entries);
+}
+
+
+/*
+int euler_float4_cmp(float4, float4);
+int 
+euler_float4_cmp(float4 a, float4 b) {
+      if (a<b)  return( -1);
+      if (a==b) return(0);
+      return(1);
+}
+*/
+
+PG_FUNCTION_INFO_V1(euler_float4_cmp);
+Datum
+euler_float4_cmp( PG_FUNCTION_ARGS )
+{
+    float4      a = PG_GETARG_FLOAT4(0);
+    float4      b = PG_GETARG_FLOAT4(1);
+
+     if ( a < b  ) PG_RETURN_FLOAT4(-1);
+     if ( a == b ) PG_RETURN_FLOAT4(0) ;
+     PG_RETURN_FLOAT4( 1 ) ;
+}
 
 
 Datum
@@ -261,6 +338,8 @@ euler_dot(PG_FUNCTION_ARGS)
         PG_RETURN_FLOAT4( (a->mag * b->mag) * ( cos(fabs(a->phase - b->phase) * TO_RADIANS)) );
 }
 
+
+
 Datum
 euler_mag_squared(PG_FUNCTION_ARGS)
 {
@@ -278,7 +357,7 @@ euler_cmp_internal( Euler *a, Euler *b )
 }
 
 Datum
-euler_abs_cmp(PG_FUNCTION_ARGS)
+euler_mag_cmp(PG_FUNCTION_ARGS)
 {
         Euler    *a = (Euler *) PG_GETARG_POINTER(0);
         Euler    *b = (Euler *) PG_GETARG_POINTER(1);

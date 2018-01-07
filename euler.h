@@ -6,6 +6,7 @@
 #include "libpq/pqformat.h"             /* needed for send/recv functions */
 #include <math.h>
 #include "utils/guc.h"
+#include "access/stratnum.h"
 
 
 #ifndef _EULER_NUMBER
@@ -17,6 +18,14 @@ typedef struct Euler {
     float4      mag;
     float4      phase;
 } Euler;
+
+typedef struct QueryInfo
+{
+        StrategyNumber strategy;
+        Datum           datum;
+        bool            is_varlena;
+        Datum           (*typecmp) (FunctionCallInfo);
+} QueryInfo;
 
 
 #define MAG_SQUARED(c)      ((c)->mag*(c)->mag )
@@ -41,7 +50,8 @@ PG_FUNCTION_INFO_V1(euler_add);
 PG_FUNCTION_INFO_V1(euler_subtract);
 PG_FUNCTION_INFO_V1(euler_dot);
 PG_FUNCTION_INFO_V1(euler_mag_squared);
-PG_FUNCTION_INFO_V1(euler_abs_cmp);
+PG_FUNCTION_INFO_V1(euler_mag_cmp);
+PG_FUNCTION_INFO_V1(gin_extract_value_euler);
 PG_FUNCTION_INFO_V1(euler_equal);
 PG_FUNCTION_INFO_V1(euler_less);
 PG_FUNCTION_INFO_V1(euler_less_equal);

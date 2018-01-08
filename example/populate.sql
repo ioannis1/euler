@@ -7,6 +7,8 @@ SELECT --public.random_string(4)
      ,( '('|| i ||','|| i || ')')::euler
 FROM  generate_series(1,4) a(i);
 
+INSERT INTO try values (20, '1<20>'::euler);
+
 ANALYZE try;
 
 \q

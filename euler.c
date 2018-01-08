@@ -9,6 +9,48 @@
 #include "euler.h"
 
 PG_FUNCTION_INFO_V1(gin_extract_query_euler);
+PG_FUNCTION_INFO_V1(gin_extract_value_int4_euler);
+PG_FUNCTION_INFO_V1(gin_extract_query_int4_euler);
+//PG_FUNCTION_INFO_V1(create_elem);
+Datum create_elem(int32);
+
+Datum
+gin_extract_value_int4_euler(PG_FUNCTION_ARGS)
+{
+        Euler      *item     = (Euler *)  PG_GETARG_POINTER(0);
+        int32      *nentries = (int32 *)  PG_GETARG_POINTER(1);
+
+        Datum      *entries  = (Datum *) palloc(sizeof(Datum) * 1);
+
+        entries[0] = Int32GetDatum( round(item->phase) );
+        *nentries  = 1;
+        PG_RETURN_POINTER(entries);
+}
+
+Datum
+create_elem(int32 i)
+{
+      PG_RETURN_INT32(i);
+}
+
+Datum
+gin_extract_query_int4_euler(PG_FUNCTION_ARGS)
+{
+        Euler          *query    = (Euler *)  PG_GETARG_POINTER(0);
+        int32          *nentries = (int32 *) PG_GETARG_POINTER(1);
+
+        Datum           *entries = (Datum *) palloc(sizeof(Datum));
+        //Datum              query = PG_GETARG_DATUM(0);
+        StrategyNumber  strategy = PG_GETARG_UINT16(2);
+        //bool      **partialmatch = (bool **) PG_GETARG_POINTER(3);
+        //Pointer     **extra_data = (Pointer **) PG_GETARG_POINTER(4);
+
+        entries[0]  = create_elem( round( query->phase) );
+	*nentries   = 1;
+        elog(ERROR, "strategy=%d\n", strategy);
+
+	PG_RETURN_POINTER(entries);
+}
 
 
 Datum
@@ -64,15 +106,6 @@ gin_extract_value_euler(PG_FUNCTION_ARGS)
 }
 
 
-/*
-int euler_float4_cmp(float4, float4);
-int 
-euler_float4_cmp(float4 a, float4 b) {
-      if (a<b)  return( -1);
-      if (a==b) return(0);
-      return(1);
-}
-*/
 
 PG_FUNCTION_INFO_V1(euler_float4_cmp);
 Datum

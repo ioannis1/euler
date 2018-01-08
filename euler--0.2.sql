@@ -2,17 +2,17 @@
 \echo Use "CREATE EXTENSION euler" to load this file. \quit
 
 CREATE OR REPLACE FUNCTION gin_extract_value_euler(euler,internal)
-    RETURNS float4
+    RETURNS internal
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OR REPLACE FUNCTION gin_extract_query_euler(euler, internal, int2, internal, internal)
-    RETURNS float4
+    RETURNS internal
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OR REPLACE FUNCTION gin_consistent_euler(internal, int2, anyelement, int4, internal, internal)
-    RETURNS float4
+    RETURNS boolean
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
@@ -31,12 +31,12 @@ STORAGE         float4;
 
 
 CREATE OR REPLACE FUNCTION gin_extract_value_int4_euler(euler,internal)
-    RETURNS int4
+    RETURNS internal
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OR REPLACE FUNCTION gin_extract_query_int4_euler(euler, internal, int2, internal, internal)
-    RETURNS int4
+    RETURNS internal
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 

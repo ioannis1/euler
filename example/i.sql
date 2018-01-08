@@ -8,7 +8,7 @@ SET enable_seqscan = off;
 --explain
 SELECT wave 
 FROM try
-WHERE  wave >=  '2<20>'::euler
+WHERE  wave <=  '2<20>'::euler
 ;
 
 \q

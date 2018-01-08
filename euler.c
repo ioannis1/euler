@@ -53,8 +53,7 @@ gin_extract_query_int4_euler(PG_FUNCTION_ARGS)
                      items[0]  = create_elem( round( (int) round(query->phase)) );
 	             *nentries   = 1;
                      break;
-            case 2 :
-            case 1 : size     =   ((int) round(query->phase)) +1;
+            case 2 : size     =   ((int) round(query->phase)) +1;
                      items = (Datum *) palloc(sizeof(Datum)* size);
 
                      for (int i=0;i<= (int) round(query->phase); i++)  {
@@ -62,11 +61,26 @@ gin_extract_query_int4_euler(PG_FUNCTION_ARGS)
                              *nentries   += 1;
                      }
                      break;
-            case 5 :
+            case 1 : size     =   ((int) round(query->phase)) +1;
+                     items = (Datum *) palloc(sizeof(Datum)* size);
+
+                     for (int i=0;i< (int) round(query->phase); i++)  {
+                              items[i] = create_elem( (int) i);
+                             *nentries   += 1;
+                     }
+                     break;
             case 4 : size     =   91 - ((int) round(query->phase));
                      items = (Datum *) palloc(sizeof(Datum)* size);
 
                      for (int i=(int)round(query->phase);i<=90; i++)  {
+                              items[*nentries] = create_elem( (int) i);
+                             *nentries   += 1;
+                     }
+                     break;
+            case 5 : size     =   91 - ((int) round(query->phase));
+                     items = (Datum *) palloc(sizeof(Datum)* size);
+
+                     for (int i=((int)round(query->phase))+1;i<=90; i++)  {
                               items[*nentries] = create_elem( (int) i);
                              *nentries   += 1;
                      }

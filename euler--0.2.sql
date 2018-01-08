@@ -46,7 +46,7 @@ CREATE OPERATOR CLASS euler_gin_ops DEFAULT FOR TYPE euler USING gin AS
     OPERATOR        3       =,
     OPERATOR        4       >=,
     OPERATOR        5       >,
-    FUNCTION        1       pg_catalog.btfloat4cmp(integer,integer),
+    FUNCTION        1       pg_catalog.btint4cmp(integer,integer),
     FUNCTION        2       gin_extract_value_int4_euler(euler, internal),
     FUNCTION        3       gin_extract_query_int4_int2(euler, internal, int2, internal, internal),
     FUNCTION        4       gin_consistent_euler(internal, int2, anyelement, int4, internal, internal),

@@ -39,17 +39,41 @@ gin_extract_query_int4_euler(PG_FUNCTION_ARGS)
         Euler          *query    = (Euler *)  PG_GETARG_POINTER(0);
         int32          *nentries = (int32 *) PG_GETARG_POINTER(1);
 
-        Datum           *entries = (Datum *) palloc(sizeof(Datum));
+        Datum           *items ;
+        int32           size;
         //Datum              query = PG_GETARG_DATUM(0);
         StrategyNumber  strategy = PG_GETARG_UINT16(2);
         //bool      **partialmatch = (bool **) PG_GETARG_POINTER(3);
         //Pointer     **extra_data = (Pointer **) PG_GETARG_POINTER(4);
 
-        entries[0]  = create_elem( round( query->phase) );
-	*nentries   = 1;
-        elog(ERROR, "strategy=%d\n", strategy);
+        *nentries   = 0;
+        switch (strategy)
+        {
+            case 3 : items = (Datum *) palloc(sizeof(Datum));
+                     items[0]  = create_elem( round( (int) round(query->phase)) );
+	             *nentries   = 1;
+                     break;
+            case 2 :
+            case 1 : size     =   ((int) round(query->phase)) +1;
+                     items = (Datum *) palloc(sizeof(Datum)* size);
 
-	PG_RETURN_POINTER(entries);
+                     for (int i=0;i<= (int) round(query->phase); i++)  {
+                              items[i] = create_elem( (int) i);
+                             *nentries   += 1;
+                     }
+                     break;
+            case 5 :
+            case 4 : size     =   91 - ((int) round(query->phase));
+                     items = (Datum *) palloc(sizeof(Datum)* size);
+
+                     for (int i=(int)round(query->phase);i<=90; i++)  {
+                              items[*nentries] = create_elem( (int) i);
+                             *nentries   += 1;
+                     }
+                     break;
+
+        }
+	PG_RETURN_POINTER(items);
 }
 
 

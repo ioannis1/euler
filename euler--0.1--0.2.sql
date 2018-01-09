@@ -15,6 +15,17 @@ CREATE OR REPLACE FUNCTION gin_consistent_euler(internal, int2, anyelement, int4
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
+CREATE OR REPLACE FUNCTION euler_greater_text(euler,text)
+    RETURNS boolean
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR > (
+    LEFTARG   = euler,
+    RIGHTARG  = text,
+    PROCEDURE = euler_greater_text
+);
+
 CREATE OPERATOR CLASS euler_gin_float4_ops FOR TYPE euler USING gin AS
    OPERATOR         1       <,
     OPERATOR        2       <=,
@@ -40,6 +51,8 @@ CREATE OR REPLACE FUNCTION gin_extract_query_int4_euler(euler, internal, int2, i
 
 -- GIN
 
+
+
 CREATE OPERATOR CLASS euler_gin_ops DEFAULT FOR TYPE euler USING gin AS
    OPERATOR         1       <,
     OPERATOR        2       <=,
@@ -57,7 +70,7 @@ CREATE OR REPLACE FUNCTION gin_extract_query_overlap_euler(euler, internal, int2
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OPERATOR CLASS euler_gin_overlap_ops FOR TYPE euler USING gin AS
+CREATE OPERATOR CLASS euler_gin_overlap_ops FOR TYPE euler  USING gin AS
    OPERATOR         1       <  (euler,int4),
     OPERATOR        2       <= (euler,int4),
     OPERATOR        3       =  (euler,int4),
@@ -68,6 +81,16 @@ CREATE OPERATOR CLASS euler_gin_overlap_ops FOR TYPE euler USING gin AS
     FUNCTION        3       gin_extract_query_overlap_euler(euler, internal, int2, internal, internal),
     FUNCTION        4       gin_consistent_euler(internal, int2, anyelement, int4, internal, internal),
 STORAGE    int4;
+
+/*
+CREATE OPERATOR CLASS euler_gin_text_ops FOR TYPE euler  USING gin AS
+    OPERATOR        3       =  (euler,text),
+    FUNCTION        1       pg_catalog.btint4cmp(integer,integer),
+    FUNCTION        2       gin_extract_value_int4_euler(euler, internal),
+    FUNCTION        3       gin_extract_query_text_euler(euler, internal, int2, internal, internal),
+    FUNCTION        4       gin_consistent_euler(internal, int2, anyelement, int4, internal, internal),
+STORAGE    int4;
+*/
 
 
 -- BRIN

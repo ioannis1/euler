@@ -4,11 +4,12 @@ SET CLIENT_MIN_MESSAGES = 'ERROR';
 begin;
 
 SET enable_seqscan = off;
+--SET enable_indexscan = off;
 
---explain
+explain (analyze, buffers)
 SELECT wave 
 FROM try
-WHERE  wave <  45
+WHERE  wave >  85
 --WHERE  wave >  '2<20>'::euler
 ;
 

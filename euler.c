@@ -8,6 +8,7 @@
 #include "utils/guc.h"
 #include "euler.h"
 
+PG_FUNCTION_INFO_V1(euler_greater_text);
 PG_FUNCTION_INFO_V1(gin_extract_query_euler);
 PG_FUNCTION_INFO_V1(gin_extract_value_int4_euler);
 PG_FUNCTION_INFO_V1(gin_extract_query_int4_euler);
@@ -31,6 +32,28 @@ Datum
 create_elem(int32 i)
 {
       PG_RETURN_INT32(i);
+}
+
+PG_FUNCTION_INFO_V1( gin_extract_query_text_euler);
+Datum
+gin_extract_query_text_euler(PG_FUNCTION_ARGS)
+{
+	// NOT IMPLEMENTED
+        text            *val = (text *) PG_GETARG_TEXT_PP(0);
+        int32          *nentries = (int32 *) PG_GETARG_POINTER(1);
+
+        Datum           *items ;
+        StrategyNumber  strategy = PG_GETARG_UINT16(2);
+
+        *nentries   = 0;
+        switch (strategy)
+        {
+            case 3 : items = (Datum *) palloc(sizeof(Datum));
+                     items[0]  = create_elem( 3);
+	             *nentries   = 1;
+                     break;
+        }
+	PG_RETURN_POINTER(items);
 }
 
 Datum
@@ -711,4 +734,14 @@ euler_phase_ei_greater(PG_FUNCTION_ARGS)
         
         if (euler_phase_ei_cmp_internal(a,b) > 0 ) PG_RETURN_BOOL(true);
         PG_RETURN_BOOL(false);
+}
+
+Datum
+euler_greater_text(PG_FUNCTION_ARGS)
+{
+        Euler    *a = (Euler *) PG_GETARG_POINTER(0);
+        text   *val = (text *) PG_GETARG_TEXT_PP(1);
+
+        char   *str = VARDATA_ANY(val);
+        PG_RETURN_BOOL( a->mag > atoi(str)  );
 }

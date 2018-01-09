@@ -58,6 +58,7 @@ PG_FUNCTION_INFO_V1(euler_less_equal);
 PG_FUNCTION_INFO_V1(euler_greater_equal);
 PG_FUNCTION_INFO_V1(euler_greater);
 PG_FUNCTION_INFO_V1(euler_overlaps);
+PG_FUNCTION_INFO_V1(euler_int32_overlaps);
 PG_FUNCTION_INFO_V1(euler_new);
 PG_FUNCTION_INFO_V1(euler_int2c_cmp);
 PG_FUNCTION_INFO_V1(euler_int2c_equal);
@@ -65,5 +66,11 @@ PG_FUNCTION_INFO_V1(euler_int2c_less);
 PG_FUNCTION_INFO_V1(euler_int2c_less_equal);
 PG_FUNCTION_INFO_V1(euler_int2c_greater_equal);
 PG_FUNCTION_INFO_V1(euler_int2c_greater);
+
+PG_FUNCTION_INFO_V1(euler_phase_ei_less);
+PG_FUNCTION_INFO_V1(euler_phase_ei_less_equal);
+PG_FUNCTION_INFO_V1(euler_phase_ei_equal);
+PG_FUNCTION_INFO_V1(euler_phase_ei_greater_equal);
+PG_FUNCTION_INFO_V1(euler_phase_ei_greater);
 
 #endif

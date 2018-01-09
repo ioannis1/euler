@@ -209,32 +209,56 @@ CREATE OR REPLACE FUNCTION euler_int2c_cmp(int,euler)
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION euler_int2c_equal(int,euler)
+
+CREATE OR REPLACE FUNCTION euler_overlaps(euler,euler)
     RETURNS boolean
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
+
+
+CREATE OR REPLACE FUNCTION euler_int32_overlaps(euler,int)
+    RETURNS boolean
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
+
 
 CREATE OR REPLACE FUNCTION euler_int2c_less(int,euler)
     RETURNS boolean
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
-
 CREATE OR REPLACE FUNCTION euler_int2c_less_equal(int,euler)
     RETURNS boolean
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
-
+CREATE OR REPLACE FUNCTION euler_int2c_equal(int,euler)
+    RETURNS boolean
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
 CREATE OR REPLACE FUNCTION euler_int2c_greater_equal(int,euler)
     RETURNS boolean
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
-
 CREATE OR REPLACE FUNCTION euler_int2c_greater(int,euler)
     RETURNS boolean
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OR REPLACE FUNCTION euler_overlaps(euler,euler)
+CREATE OR REPLACE FUNCTION euler_phase_ei_less(euler,int4)
+    RETURNS boolean
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
+CREATE OR REPLACE FUNCTION euler_phase_ei_less_equal(euler,int4)
+    RETURNS boolean
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
+CREATE OR REPLACE FUNCTION euler_phase_ei_equal(euler,int4)
+    RETURNS boolean
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
+CREATE OR REPLACE FUNCTION euler_phase_ei_greater_equal(euler,int4)
+    RETURNS boolean
+    AS '$libdir/euler'
+    LANGUAGE C IMMUTABLE STRICT;
+CREATE OR REPLACE FUNCTION euler_phase_ei_greater(euler,int4)
     RETURNS boolean
     AS '$libdir/euler'
     LANGUAGE C IMMUTABLE STRICT;
@@ -266,29 +290,28 @@ CREATE OR REPLACE FUNCTION euler_phase_add(euler,float4)
     LANGUAGE C IMMUTABLE STRICT;
 
 
-
 CREATE OPERATOR < (
-    leftarg    = int,
-    rightarg   = euler,
-    procedure  = euler_int2c_less,
+    leftarg    = euler,
+    rightarg   = int4,
+    procedure  = euler_phase_ei_less,
     commutator = >  ,
     restrict   = scalarltsel,
     join       = scalarltjoinsel
 );
 
 CREATE OPERATOR <= (
-    leftarg    = int,
-    rightarg   = euler,
-    procedure  = euler_int2c_less_equal,
+    leftarg    = euler,
+    rightarg   = int4,
+    procedure  = euler_phase_ei_less_equal,
     commutator = >=  ,
     restrict   = scalarltsel,
     join       = scalarltjoinsel
 );
 
 CREATE OPERATOR = (
-    leftarg    = int,
-    rightarg   = euler,
-    procedure  = euler_int2c_equal,
+    leftarg    = euler,
+    rightarg   = int4,
+    procedure  = euler_phase_ei_equal,
     commutator = = ,
     restrict   = eqsel,
     join       = eqjoinsel
@@ -296,18 +319,18 @@ CREATE OPERATOR = (
 
 
 CREATE OPERATOR >= (
-    leftarg    = int,
-    rightarg   = euler,
-    procedure  = euler_int2c_greater_equal,
+    leftarg    = euler,
+    rightarg   = int4,
+    procedure  = euler_phase_ei_greater_equal,
     commutator = <= ,
     restrict   = scalargtsel,
     join       = scalargtjoinsel
 );
 
 CREATE OPERATOR > (
-    leftarg    = int,
-    rightarg   = euler,
-    procedure  = euler_int2c_greater,
+    leftarg    = euler,
+    rightarg   = int4,
+    procedure  = euler_phase_ei_greater,
     commutator = < ,
     restrict   = scalargtsel,
     join       = scalargtjoinsel
@@ -322,5 +345,13 @@ CREATE OPERATOR CLASS euler_minimax_ops DEFAULT FOR TYPE euler USING brin AS
         OPERATOR 2 <= ,
         OPERATOR 3 =  ,
         OPERATOR 4 >= ,
-        OPERATOR 5 >
-;
+        OPERATOR 5 > ;
+
+CREATE OPERATOR @@ (
+    leftarg    = euler,
+    rightarg   = int,
+    procedure  = euler_int32_overlaps,
+    commutator = @@ ,
+    restrict   = scalargtsel,
+    join       = scalargtjoinsel
+);
